@@ -1,8 +1,8 @@
 # Firefox MeTube addon
 
-[![Firefox Add-on](https://img.shields.io/amo/v/metube-downloader?label=Firefox%20Add-on)](https://addons.mozilla.org/en-US/firefox/addon/metube-downloader)
+This is a fork of the nanocortex extension, I fixed a bug with the right mouse button (in the original extension, when you right-click on the link and select send to metube, the link of the current page was transmitted, not the links under the cursor) and I added linking sites and folders for downloading. for example youtube.com (site) -> yt (folder), boosty.to -> bt. And so it is for all sites that support yt-dlp.
+
 [![License: MPL 2.0](https://img.shields.io/badge/License-MPL%202.0-brightgreen.svg)](https://opensource.org/licenses/MPL-2.0)
-[![GitHub issues](https://img.shields.io/github/issues/nanocortex/metube-firefox-addon)](https://github.com/nanocortex/metube-firefox-addon/issues)
 
 Browser extension for queueing videos to your [MeTube](https://github.com/alexta69/metube) instance.
 
