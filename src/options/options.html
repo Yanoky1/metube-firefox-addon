@@ -1,0 +1,147 @@
+<!doctype html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../common/common.css" />
+    <link rel="stylesheet" href="options.css" />
+  </head>
+
+  <body>
+    <form>
+      <fieldset>
+        <legend>Settings:</legend>
+        <div class="field">
+          <label for="url">MeTube instance url</label><br />
+          <input type="text" id="url" placeholder="https://metube.example.com" />
+          <div id="urlValidationMessage" class="text-danger"></div>
+          <div id="testConnectionMessage"></div>
+        </div>
+        <div class="field">
+          <label for="defaultQuality">Default quality:</label>
+          <select name="defaultQuality" id="defaultQuality">
+            <option value="best">Best</option>
+            <option value="2160">2160p</option>
+            <option value="1440">1440p</option>
+            <option value="1080">1080p</option>
+            <option value="720">720p</option>
+            <option value="480">480p</option>
+            <option value="360">360p</option>
+            <option value="240">240p</option>
+            <option value="worst">Worst</option>
+            <option value="audio">Audio only</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="defaultFormat">Default format:</label>
+          <select name="defaultFormat" id="defaultFormat">
+            <option value="any">Any</option>
+            <option value="mp4">MP4</option>
+            <option value="m4a">M4A</option>
+            <option value="mp3">MP3</option>
+            <option value="opus">OPUS</option>
+            <option value="wav">WAV</option>
+            <option value="flac">FLAC</option>
+            <option value="thumbnail">Thumbnail</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="defaultFolder">Default folder</label><br />
+          <input type="text" id="defaultFolder" placeholder="" />
+        </div>
+        <div class="field">
+          <label for="defaultCustomNamePrefix">Custom name prefix</label><br />
+          <input type="text" id="defaultCustomNamePrefix" placeholder="" />
+        </div>
+        <div class="field">
+          <input type="checkbox" id="openInNewTab" />
+          <label for="openInNewTab">Open MeTube instance in new tab after adding to queue</label>
+        </div>
+        <div class="field">
+          <input type="checkbox" id="showContextMenu" />
+          <label for="showContextMenu">Show context menu on links</label>
+        </div>
+        <div class="field">
+          <input type="checkbox" id="showPageContextMenu" />
+          <label for="showPageContextMenu">Show context menu on page (sends current page URL to MeTube)</label>
+        </div>
+        <div class="field">
+          <input type="checkbox" id="defaultAutoStart" />
+          <label for="defaultAutoStart">Auto Start - automatically start the download when the file is ready</label>
+        </div>
+        <div class="field">
+          <input type="checkbox" id="oneClickMode" />
+          <label for="oneClickMode">One-click mode - automatically send to MeTube when using extension icon, context menu, or keyboard shortcut (default values, shows progress)</label>
+        </div>
+        <div class="field">
+          <input type="checkbox" id="strictPlaylistMode" />
+          <label for="strictPlaylistMode">Strict Playlist Mode - only download playlists when URL explicitly points to a playlist</label>
+        </div>
+        <div class="field">
+          <input type="checkbox" id="useCookieAuth" />
+          <label for="useCookieAuth">Send cookies for authentication (required for SSO/reverse proxy auth)</label>
+          <div id="ssoWarning" class="hidden" style="margin-top: 0.5rem; padding: 0.5rem; background-color: #fff3cd; border: 1px solid #ffc107; border-radius: 4px;">
+            <strong>⚠️ Privacy Notice:</strong> SSO mode requires access to all websites to follow authentication redirects. The extension will only access your MeTube instance and authentication provider. This permission is necessary because SSO systems can redirect to different domains for login.
+          </div>
+        </div>
+        <div class="field">
+          <input type="checkbox" id="sendCustomHeaders" />
+          <label for="sendCustomHeaders">Send custom headers</label>
+        </div>
+        <section id="customHeadersSection" class="section hidden">
+          <p>Custom headers which are included when queueing to MeTube instance.</p>
+          <p>These can be used to provide credentials if your MeTube instance is behind a proxy or auth service.</p>
+          <div class="inline-form-fields">
+            <div>
+              <label for="headerNameInput">Header name:</label>
+              <input type="text" id="headerNameInput" placeholder="X-Foo-Header" />
+            </div>
+            <div>
+              <label for="headerValueInput">Header value:</label>
+              <input type="text" id="headerValueInput" placeholder="some-custom-value" />
+            </div>
+            <button type="button" id="addHeaderButton" aria-label="Add custom header">➕</button>
+          </div>
+          <div id="headerValidationMessage" class="text-danger"></div>
+          <ul id="headersList" class="list-unstyled"></ul>
+        </section>
+        <!-- Folder Auto-Fill Rules -->
+        <div class="section">
+          <h3>📁 Auto-folder rules</h3>
+          <p class="help-text">When a URL matches a pattern, the folder field will be auto-filled.</p>
+          
+          <table id="triggersTable">
+            <thead>
+              <tr>
+                <th>URL Pattern</th>
+                <th>Folder</th>
+                <th style="width: 40px"></th>
+              </tr>
+            </thead>
+            <tbody id="triggersList">
+              <!-- Rows will be added here dynamically -->
+            </tbody>
+          </table>
+          
+          <div class="trigger-form inline-form-fields">
+            <input type="text" id="triggerPattern" placeholder="Pattern, e.g. youtube.com" />
+            <input type="text" id="triggerFolder" placeholder="Folder, e.g. yt" />
+            <button type="button" id="addTriggerBtn" class="btn-sm">➕ Add</button>
+          </div>
+          <div id="triggerValidationMessage" class="text-danger hidden"></div>
+          
+          <p class="help-text" style="margin-top: 0.5rem; font-size: 0.9em;">
+            <strong>Pattern examples:</strong><br>
+            • <code>youtube.com</code> — matches any URL containing "youtube.com"<br>
+            • <code>regex:^https?://.*\.twitter\.com</code> — RegExp pattern (prefix with <code>regex:</code>)
+          </p>
+        </div>
+        <button type="submit">Save Settings</button>
+        <div id="saveSuccessMessage" class="text-success hidden"></div>
+      </fieldset>
+    </form>
+
+    <script src="../common/utils.js"></script>
+    <script src="options.js"></script>
+  </body>
+</html>

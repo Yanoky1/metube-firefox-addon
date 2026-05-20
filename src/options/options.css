@@ -1,0 +1,277 @@
+.section {
+  border: 1px solid #ccc;
+  padding: 0 1rem;
+  margin-bottom: 1rem;
+}
+
+.inline-form-fields {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.5rem;
+}
+
+.inline-form-fields input {
+  display: block;
+}
+
+.list-unstyled {
+  list-style: none;
+  padding: 0;
+}
+
+.header-pair {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.header-pair code {
+  border: 1px solid #ccc;
+  background-color: #eee;
+  padding: 0.25rem;
+}
+
+#saveSuccessMessage {
+  margin-top: 0.5rem;
+}
+
+.field {
+  margin-bottom: .75rem;
+}
+
+.field input[type="text"],
+.field select {
+  display: block;
+  margin-top: 0.25rem;
+}
+
+#testConnectionMessage {
+  margin-top: 0.25rem;
+  font-size: 0.9em;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Auto-folder rules section */
+#triggersTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+  font-size: 0.95em;
+}
+
+#triggersTable thead {
+  background-color: #37474F;
+  color: #CFD8DC;
+}
+
+#triggersTable th,
+#triggersTable td {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid #455A64;
+}
+
+#triggersTable th {
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.85em;
+  letter-spacing: 0.5px;
+}
+
+#triggersTable tbody tr:hover {
+  background-color: rgba(69, 90, 100, 0.3);
+}
+
+#triggersTable code {
+  background-color: #37474F;
+  color: #80CBC4;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.9em;
+  font-family: 'Courier New', monospace;
+  display: inline-block;
+  min-width: 100px;
+}
+
+#triggersTable .btn-remove {
+  background: none;
+  border: none;
+  color: #EF5350;
+  cursor: pointer;
+  font-size: 1.2em;
+  padding: 0.4rem 0.6rem;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  opacity: 0.7;
+}
+
+#triggersTable .btn-remove:hover {
+  opacity: 1;
+  background-color: rgba(239, 83, 80, 0.1);
+  transform: scale(1.1);
+}
+
+/* Trigger form inputs */
+.trigger-form input[type="text"] {
+  flex: 1;
+  min-width: 200px;
+  padding: 0.6rem 0.8rem;
+  border: 1px solid #455A64;
+  border-radius: 4px;
+  background-color: #37474F;
+  color: #CFD8DC;
+  font-size: 0.95em;
+  transition: border-color 0.2s ease;
+}
+
+.trigger-form input[type="text"]:focus {
+  outline: none;
+  border-color: #0D47A1;
+  box-shadow: 0 0 0 3px rgba(13, 71, 161, 0.1);
+}
+
+.trigger-form input[type="text"]::placeholder {
+  color: #78909C;
+  opacity: 0.8;
+}
+
+/* Add button */
+.trigger-form .btn-add {
+  background-color: #0D47A1;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 0.6rem 1.2rem;
+  font-size: 0.95em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  white-space: nowrap;
+}
+
+.trigger-form .btn-add:hover {
+  background-color: #1565C0;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(13, 71, 161, 0.3);
+}
+
+.trigger-form .btn-add:active {
+  transform: translateY(0);
+}
+
+/* Pattern examples */
+.pattern-examples {
+  margin-top: 1rem;
+  padding: 1rem;
+  background-color: rgba(55, 71, 79, 0.5);
+  border-left: 4px solid #0D47A1;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+
+.pattern-examples h4 {
+  margin: 0 0 0.5rem 0;
+  color: #80CBC4;
+  font-size: 0.95em;
+  font-weight: 600;
+}
+
+.pattern-examples ul {
+  margin: 0;
+  padding-left: 1.5rem;
+  color: #B0BEC5;
+}
+
+.pattern-examples li {
+  margin-bottom: 0.4rem;
+  line-height: 1.5;
+}
+
+.pattern-examples code {
+  background-color: #37474F;
+  color: #80CBC4;
+  padding: 0.2rem 0.4rem;
+  border-radius: 3px;
+  font-size: 0.9em;
+  font-family: 'Courier New', monospace;
+}
+
+/* Validation message */
+#triggerValidationMessage {
+  margin-top: 0.5rem;
+  padding: 0.5rem;
+  border-radius: 4px;
+  font-size: 0.9em;
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Empty state */
+#triggersTable tbody tr:only-child td:only-child {
+  text-align: center;
+  padding: 2rem;
+  color: #78909C;
+  font-style: italic;
+}
+
+/* Section header */
+.section h3 {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  color: #80CBC4;
+  font-size: 1.1em;
+}
+
+.section > p {
+  color: #90A4AE;
+  font-size: 0.9em;
+  margin-bottom: 1rem;
+  line-height: 1.5;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .inline-form-fields {
+    flex-direction: column;
+  }
+  
+  .inline-form-fields input {
+    width: 100%;
+  }
+  
+  #triggersTable {
+    font-size: 0.85em;
+  }
+  
+  #triggersTable th,
+  #triggersTable td {
+    padding: 0.5rem;
+  }
+}
