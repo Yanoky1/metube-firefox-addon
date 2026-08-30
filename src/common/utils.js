@@ -79,14 +79,15 @@ function buildTemplateVariables(itemUrl) {
   const month = pad(now.getMonth() + 1);
   const day = pad(now.getDate());
 
-  return {
-    HOSTNAME: hostname,
-    DOMAIN: hostname.startsWith('www.') ? hostname.slice(4) : hostname,
+return {
+    HOSTNAME: hostname.replace(/\./g, '_'),
+    DOMAIN: (hostname.startsWith('www.') ? hostname.slice(4) : hostname)
+        .replace(/\./g, '_'),
     DATE: `${year}-${month}-${day}`,
     YEAR: year,
     MONTH: month,
     DAY: day,
-  };
+};
 }
 
 // "videos/%DOMAIN%/clips" -> "videos/clips" when %DOMAIN% resolves to nothing.
@@ -133,5 +134,48 @@ async function requestPermissionsForUrl(url, useCookieAuth) {
   } catch (error) {
     console.error("Error requesting permission:", error);
     return false;
+  }
+}
+
+async function getYtdlOptionsForUrl(itemUrl) {
+  try {
+    const { domainYtdlOptions = [] } =
+      await browser.storage.sync.get("domainYtdlOptions");
+
+    const hostname = new URL(itemUrl).hostname.toLowerCase();
+
+    const sortedRules = [...domainYtdlOptions].sort(
+      (a, b) => b.domain.length - a.domain.length
+    );
+
+    for (const rule of sortedRules) {
+      const domain = rule.domain
+        .trim()
+        .toLowerCase()
+        .replace(/^\*\./, "");
+
+      if (
+        hostname === domain ||
+        hostname.endsWith("." + domain)
+      ) {
+        return {
+          options: rule.options || {},
+          folder: rule.folder || ""
+        };
+      }
+    }
+
+    return {
+      options: {},
+      folder: ""
+    };
+
+  } catch (error) {
+    console.error("Failed to resolve yt-dlp options:", error);
+
+    return {
+      options: {},
+      folder: ""
+    };
   }
 }

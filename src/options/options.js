@@ -297,6 +297,8 @@ function addCustomHeader(header) {
 document.addEventListener("DOMContentLoaded", setupDownloadOptionSelects);
 document.addEventListener("DOMContentLoaded", setupCustomHeadersSection);
 document.addEventListener("DOMContentLoaded", restoreOptions);
+document.addEventListener("DOMContentLoaded", setupYtdlOptionsSection);
+document.addEventListener("DOMContentLoaded", restoreYtdlOptions);
 document.querySelector("form").addEventListener("submit", saveOptions);
 
 document.getElementById("url").addEventListener("input", () => {
@@ -313,3 +315,176 @@ document.getElementById("useCookieAuth").addEventListener("change", (event) => {
     ssoWarning.classList.add("hidden");
   }
 });
+
+
+function addYtdlOptionsRule(rule) {
+  const list = document.getElementById("ytdlOptionsList");
+
+  const item = document.createElement("li");
+  item.classList.add("ytdl-options-rule");
+
+  // Header
+  const header = document.createElement("div");
+  header.classList.add("ytdl-options-rule-header");
+
+  const domain = document.createElement("code");
+  domain.classList.add("ytdl-options-domain");
+  domain.textContent = rule.domain;
+
+  const folder = document.createElement("span");
+  folder.classList.add("ytdl-options-folder");
+  folder.textContent = rule.folder || "default folder";
+
+  const removeButton = document.createElement("button");
+  removeButton.type = "button";
+  removeButton.classList.add("ytdl-options-remove");
+  removeButton.textContent = "➖";
+  removeButton.setAttribute(
+    "aria-label",
+    "Remove yt-dlp options rule"
+  );
+
+  header.append(domain, folder, removeButton);
+
+  // Options
+  const optionsWrapper = document.createElement("div");
+  optionsWrapper.classList.add("ytdl-options-json");
+
+  const options = document.createElement("pre");
+  options.textContent = JSON.stringify(rule.options || {}, null, 2);
+
+  optionsWrapper.appendChild(options);
+
+  removeButton.addEventListener("click", async () => {
+    const stored = await browser.storage.sync.get(
+      "domainYtdlOptions"
+    );
+
+    const rules = stored.domainYtdlOptions || [];
+
+    const updated = rules.filter(
+      existing => existing.domain !== rule.domain
+    );
+
+    await browser.storage.sync.set({
+      domainYtdlOptions: updated
+    });
+
+    item.remove();
+  });
+
+  item.append(header, optionsWrapper);
+  list.appendChild(item);
+}
+
+async function restoreYtdlOptions() {
+    const result = await browser.storage.sync.get(
+        "domainYtdlOptions"
+    );
+
+    const rules = result.domainYtdlOptions || [];
+
+    rules.forEach(rule => {
+        addYtdlOptionsRule(rule);
+    });
+}
+
+
+function setupYtdlOptionsSection() {
+    const domainInput =
+        document.getElementById("ytdlDomainInput");
+
+    const folderInput =
+        document.getElementById("ytdlFolderInput");
+
+    const optionsInput =
+        document.getElementById("ytdlOptionsInput");
+
+    const addButton =
+        document.getElementById("addYtdlOptionsButton");
+
+    const validation =
+        document.getElementById(
+            "ytdlOptionsValidationMessage"
+        );
+
+    addButton.addEventListener("click", async () => {
+        validation.textContent = "";
+
+        const domain =
+            domainInput.value.trim().toLowerCase();
+
+        const folder =
+            folderInput.value.trim();
+
+        const rawOptions =
+            optionsInput.value.trim();
+
+        if (!domain) {
+            validation.textContent = "Укажите домен.";
+            return;
+        }
+
+        let options = {};
+
+        // Пустые Options разрешаем
+        if (rawOptions) {
+            try {
+                options = JSON.parse(rawOptions);
+            } catch (error) {
+                validation.textContent =
+                    "Custom yt-dlp Options содержит некорректный JSON.";
+                return;
+            }
+
+            if (
+                !options ||
+                typeof options !== "object" ||
+                Array.isArray(options)
+            ) {
+                validation.textContent =
+                    "Options должен быть JSON-объектом.";
+                return;
+            }
+        }
+
+        const result =
+            await browser.storage.sync.get(
+                "domainYtdlOptions"
+            );
+
+        const rules =
+            result.domainYtdlOptions || [];
+
+        const existingIndex =
+            rules.findIndex(
+                rule => rule.domain === domain
+            );
+
+        const newRule = {
+            domain,
+            folder,
+            options
+        };
+
+        if (existingIndex >= 0) {
+            rules[existingIndex] = newRule;
+        } else {
+            rules.push(newRule);
+        }
+
+        await browser.storage.sync.set({
+            domainYtdlOptions: rules
+        });
+
+        document.getElementById(
+            "ytdlOptionsList"
+        ).innerHTML = "";
+
+        await restoreYtdlOptions();
+
+        domainInput.value = "";
+        folderInput.value = "";
+        optionsInput.value = "";
+    });
+}

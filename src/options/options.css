@@ -48,3 +48,63 @@
   margin-top: 0.25rem;
   font-size: 0.9em;
 }
+
+
+
+
+
+
+#ytdlOptionsList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 12px;
+  padding: 0;
+}
+
+.ytdl-options-rule {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 12px;
+  background: #f8f8f8;
+}
+
+.ytdl-options-rule-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.ytdl-options-domain {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.ytdl-options-folder {
+  font-size: 0.85rem;
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: #e5e5e5;
+  color: #555;
+}
+
+.ytdl-options-remove {
+  margin-left: auto;
+}
+
+.ytdl-options-json {
+  overflow-x: auto;
+  border-radius: 6px;
+  background: #eee;
+  padding: 10px;
+}
+
+.ytdl-options-json pre {
+  margin: 0;
+  font-family: monospace;
+  font-size: 0.85rem;
+  line-height: 1.45;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}

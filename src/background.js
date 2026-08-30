@@ -150,8 +150,13 @@ async function sendToMeTube(itemUrl, options) {
 
   try {
     itemUrl = itemUrl || await getCurrentUrl();
+
     const resolvedFolder = resolveTemplateVariables(folder, itemUrl);
     const resolvedCustomNamePrefix = resolveTemplateVariables(customNamePrefix, itemUrl);
+    const ytdlRule = await getYtdlOptionsForUrl(itemUrl);
+    const ytdlOptionsOverrides = ytdlRule.options;
+    const domainFolder = resolveTemplateVariables(ytdlRule.folder, itemUrl);
+
     console.log(`Send to MeTube. Url: ${itemUrl}, downloadType: ${downloadType}, codec: ${codec}, quality: ${quality}, format: ${format}, subtitleLanguage: ${subtitleLanguage}, subtitleMode: ${subtitleMode}, folder: ${resolvedFolder}, customNamePrefix: ${resolvedCustomNamePrefix}, autoStart: ${autoStart}, strictPlaylistMode: ${strictPlaylistMode}`);
     let meTubeUrl = await getMeTubeUrl();
     if (!meTubeUrl) {
@@ -186,10 +191,11 @@ async function sendToMeTube(itemUrl, options) {
           "codec": codec,
           "quality": quality,
           "format": format,
-          "folder": resolvedFolder,
+          "folder": domainFolder || resolvedFolder,
           "custom_name_prefix": resolvedCustomNamePrefix,
           "auto_start": autoStart,
           "playlist_strict_mode": strictPlaylistMode,
+          "ytdl_options_overrides": ytdlOptionsOverrides,
           ...(downloadType === "captions" ? {
             "subtitle_language": subtitleLanguage,
             "subtitle_mode": subtitleMode,
